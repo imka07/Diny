@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
+
 
 public class Bird : MonoBehaviour
 {
@@ -19,6 +21,7 @@ public class Bird : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transform.DOMoveY(0.1f, 1.5f).SetEase(Ease.InOutSine).SetLoops(5, LoopType.Yoyo);
         sprite = GetComponentInChildren<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         Instance = this;      

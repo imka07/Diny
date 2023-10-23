@@ -23,6 +23,7 @@ public class LvlManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        InputPause();
         var s = FindObjectOfType<Score>();
         s.ScoreIn(true);
 
@@ -36,6 +37,27 @@ public class LvlManager : MonoBehaviour
         pause.SetActive(true);
         Time.timeScale = 0;
         
+    }
+    private float test = 0;
+    private void InputPause()
+    {
+        
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            test++;
+        }
+        switch(test)
+        {
+
+            case 1:
+                OpenPause();
+                break;
+            case 2:
+                OffPause();
+                test = 0;
+                break;
+        }
+       
     }
     public void OffPause()
     {

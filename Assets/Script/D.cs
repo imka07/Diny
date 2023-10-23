@@ -7,10 +7,9 @@ using Imran.DataBase;
 
 public class D : MonoBehaviour
 {
-    public float speed = 3f;
     public AudioSource auraSound;
     Rigidbody2D rb;
-    public InterAd interAd;
+    
     public SpriteRenderer sprite;
     public float JumpForce = 3f;
     bool isGround = false;
@@ -68,17 +67,20 @@ public class D : MonoBehaviour
     private Fire fr;
     public Shaker shake1;
     public GameObject aura;
-    
     private CheckPoint currentCheckPoint = null;
     public ParticleSystem explosion;
     GameObject Bird;
+    [SerializeField] private GameObject pressECanvas, killThem, protectYourself;
     public GameObject lightButton;
+    [SerializeField] private GameObject LightEx;
     public static D Instance { get; set; }
     // Start is called before the first frame update
     void Start()
     {
-
-       
+     
+        pressECanvas.SetActive(false);
+        killThem.SetActive(false);
+        protectYourself.SetActive(false);
         pauseButton.SetActive(true);
         tryCount = PlayerPrefs.GetInt("tryCount");
         auraLight.SetActive(false);
@@ -97,7 +99,6 @@ public class D : MonoBehaviour
         blue.enabled = false;
         sprite.enabled = true;
         Yellow.enabled = false;
-        lightButton.SetActive(false);
         isRed = false;
         isBlue = false;
         isGreen = true;
@@ -129,20 +130,12 @@ public class D : MonoBehaviour
         }
        
     }
-    private void Awake()
-    {
-        //PlayerPrefs.SetFloat("Time", Time.timeScale = 1);
-        Time.timeScale = 1;
-    }
-   
-
-
     // Update is called once per frame
     void Update()
     {
-        
-        
-        
+
+
+     
         var s = FindObjectOfType<Score>();
         s.ScoreIn(true);
         if (health > 3)
@@ -159,23 +152,27 @@ public class D : MonoBehaviour
             }
             if(health == 0)
             {
+               
                 Die();
             }
    
         }  
     }
     
+    
     private void FixedUpdate()
     {
         CheckGround();
     }
+    [SerializeField] private float groundLengh = 0.6f;
     private void CheckGround()
     {
 
+
         isGround = false;
         Collider2D[] collider = Physics2D.OverlapCircleAll(groundCheck.position, groundRaduis, groundLayer);
-        if (collider.Length > 0) 
-        isGround = true;
+        if (collider.Length > 0)
+            isGround = true;
     }
 
     private bool _isDead = false;
@@ -228,6 +225,9 @@ public class D : MonoBehaviour
     }
     public void FlameMen(bool active)
     {
+        pressECanvas.SetActive(false);
+        pressECanvas.SetActive(false);
+        killThem.SetActive(active);
         flameMen.SetActive(active);
     }
     public void FlameAura(bool active)
@@ -240,6 +240,9 @@ public class D : MonoBehaviour
     }
     public void ArMen(bool active)
     {
+        killThem.SetActive(false);
+        pressECanvas.SetActive(false);
+        protectYourself.SetActive(active);
         Ar.SetActive(active);
     }
     public void Aura(bool active)
@@ -252,12 +255,16 @@ public class D : MonoBehaviour
     }
     public void LighMen(bool active)
     {
+        pressECanvas.SetActive(false);
+        killThem.SetActive(false);
+        pressECanvas.SetActive(active);
         lightMen.SetActive(active);
     }
-    public void LightButton(bool active)
+    public void LightButtonActivated(bool active)
     {
         lightButton.SetActive(active);
     }
+   
     public void StopFlame()
     {
         flame1 = false;
@@ -286,10 +293,16 @@ public class D : MonoBehaviour
             ch_sprites[i].color = Color.white;
         }
     }
+   
     public void Jump()
     {
         if (isGround)
-            rb.velocity = Vector2.up * JumpForce;
+        { 
+           rb.velocity = new Vector2(rb.velocity.x, 0);
+        rb.AddForce(Vector2.up * JumpForce, ForceMode2D.Impulse);
+        }
+
+        
     }
     public void StopArmor()
     {
@@ -314,7 +327,7 @@ public class D : MonoBehaviour
         
         
 
-        ChangeSkin(DataBase.LoadActiveSkin());
+    
     }
 
     public void ChangeSkin(int index)
@@ -332,8 +345,36 @@ public class D : MonoBehaviour
                 break;
         }
     }
+    //public void Boom()
+    //{
 
-    public void ChangeSkin(bool active)
+    //    var birds = FindObjectsOfType<Bird>();
+
+    //    if (birds.Length > 0)
+    //    {
+    //        for (int i = 0; i < birds.Length; i++)
+    //        {
+    //            var s = FindObjectOfType<Score>();
+    //            s.score1 += 5;
+    //            print(i);
+    //            birds[i].Die();
+    //            Instantiate(LightEx, birds[i].transform.position, Quaternion.identity);
+
+    //        }
+    //    }
+    //}
+    //public bool inputLight = false;
+    //private void InputLight()
+    //{
+    //    if(Input.GetKeyDown(KeyCode.E) && isBlue == true)
+    //    {
+    //        ShakerCinemachine.Instance.Shaker(5, 0.5f);
+    //        Boom();
+    //        inputLight = true;
+    //    }
+    //}
+ 
+    public void ChangeSkin()
     {
         
         isRed = true;
@@ -343,7 +384,7 @@ public class D : MonoBehaviour
         blue.enabled = false;
        
     }
-    public void YellowSkin(bool active)
+    public void YellowSkin()
     {
         sprite.enabled = false;
      
@@ -352,7 +393,7 @@ public class D : MonoBehaviour
         blue.enabled = false;
         red.enabled = false;
     }
-    public void YellowSkin2(bool active)
+    public void YellowSkin2()
     {
        
         isYellow = false;
@@ -361,7 +402,7 @@ public class D : MonoBehaviour
         sprite.enabled = true;
         red.enabled = false;
     }
-    public void SkinBlue(bool active)
+    public void SkinBlue()
     {
         auraLight.SetActive(true);
         isBlue = true;
@@ -369,7 +410,7 @@ public class D : MonoBehaviour
         sprite.enabled = false;
         red.enabled = false;
     }
-    public void SkinBlue2(bool active)
+    public void SkinBlue2()
     {
         auraLight.SetActive(false);
         isBlue = false;
@@ -377,21 +418,14 @@ public class D : MonoBehaviour
         sprite.enabled = true;
         red.enabled = false;
     }
-    public void ChangeSkin2(bool active)
+    public void ChangeSkin2()
     {
 
         isRed = false;
         red.enabled = false;
         flameAura.SetActive(false);
         sprite.enabled = true;
-        blue.enabled = false;
     }
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-       
-    }
-    
-
     private void PickFlame()
     {
         oas.SetActive(true);
@@ -407,20 +441,18 @@ public class D : MonoBehaviour
         flameAura.SetActive(false);
         aura.SetActive(false);
         flameSound.Play();
-
         fr.StartLightFr();
     }
     private void PickJump()
     {
-        JumpForce = JumpForce + jumpFactor;
         JumpSoundEffect.pitch = Random.Range(0.9f, 1f);
         JumpSoundEffect.Play();
         fr.StartJumpFr();
     }
     private void Bomb()
     {
-        if(!isYellow)
-        Invoke("Die", 0.2f);
+        if (!isYellow)
+            health -= 1;
     }
     private void PickArmor()
     {     
@@ -431,19 +463,20 @@ public class D : MonoBehaviour
     }
     private void PickHeart()
     {
-        health = health + 1;
+        health += 1;
         heartSound.Play();
         
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        
-        
-        
+
+
+        ChangeSkin(DataBase.LoadActiveSkin());
         if (collision.gameObject.tag == "Bird")
         {
-            if(isRed)
+            ShakerCinemachine.Instance.Shaker(5, 0.5f);
+            if (isRed)
             {
                 var s = FindObjectOfType<Score>();
                 s.score1 += 5;
@@ -458,6 +491,7 @@ public class D : MonoBehaviour
         }
         if(collision.gameObject.tag == "Bomb")
         {
+            ShakerCinemachine.Instance.Shaker(5, 0.5f);
             Bomb();
             Instantiate(explosion, collision.transform.position, Quaternion.identity);
             Destroy(collision.gameObject);

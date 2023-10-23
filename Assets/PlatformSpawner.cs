@@ -27,10 +27,6 @@ public class PlatformSpawner : MonoBehaviour
             var part = Instantiate(Pl[rand], new Vector3(15.6f, -6, 0), Quaternion.identity);
             part.transform.parent = transform;
             TimeBtwSpawn = startInterval;
-            if (startInterval > minTime)
-            {
-                startInterval -= decreaseTime;
-            }
         }
         else
             TimeBtwSpawn -= Time.deltaTime;

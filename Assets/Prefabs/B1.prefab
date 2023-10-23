@@ -114,9 +114,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10c8615e4888d0a40a80aeb4525fe63b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
+  speed: 10
   damage: 1
-  lifeTime: 15
+  lifeTime: 10
   birdEx: {fileID: 8617957285983582673, guid: e4270e00cc9f6a94c9f3191588b5ce1a, type: 3}
 --- !u!95 &7237308515466331373
 Animator:

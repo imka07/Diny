@@ -51,16 +51,9 @@ public class Fire : MonoBehaviour
     private IEnumerator Flame()
     {
         flame.fillAmount = 1;
-
-
-        
-        var d = player.GetComponent<D>();
-        d.LightButton(false);
-        d.LighMen(false);
-        float timer = 4;
-        d.ArmorSetActive(false);
-        d.ChangeSkin(true);
-        d.SkinBlue2(false);
+          var d = player.GetComponent<D>();
+        float timer = 5;
+        d.ChangeSkin();
         d.FlameMen(true);
    
         while (timer > 0)
@@ -73,19 +66,18 @@ public class Fire : MonoBehaviour
             yield return null;
         }
         flame.fillAmount = 0;
-       d.StopFlame();
-        d.ChangeSkin2(true);
+        d.StopFlame();
+        d.ChangeSkin2();
         d.FlameMen(false);
-    
-        d.ArmorSetActive(false);
         Flamecoroutine = null;
     }
     private IEnumerator JumoFx()
     {
         var d = player.GetComponent<D>();
         Jump.fillAmount = 1;
+        d.JumpForce += d.jumpFactor;
         float timer = 3;
-        player.GetComponent<D>().JpMen(true);
+        d.JpMen(true);
         while (timer > 0)  
         {
             timer -= Time.deltaTime;
@@ -93,9 +85,9 @@ public class Fire : MonoBehaviour
             yield return null;
         }
         Jump.fillAmount = 0;
-        player.GetComponent<D>().JpMen(false);
-        player.GetComponent<D>().JumpForce = 23;
-        
+        d.JpMen(false);
+        d.JumpForce -= d.jumpFactor;
+
         JumpFx = null;
     }
    
@@ -106,20 +98,16 @@ public class Fire : MonoBehaviour
         var d = player.GetComponent<D>();
         d.red.enabled = false;
         Lightner.fillAmount = 1;
-            float timer = 3;
-            d.ArmorSetActive(false);
-            d.LighMen(true);
-        d.LightButton(true);
-        d.SkinBlue(true);
-  
-      
-        
-            d.lightButton.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                d.LighMen(false);
-                d.SkinBlue2(false);
-            });
-            while (timer > 0)
+        float timer = 4f;
+        d.LighMen(true);
+        d.LightButtonActivated(true);
+        d.SkinBlue();
+        d.lightButton.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            d.LighMen(false);
+            d.SkinBlue2();
+        });
+        while (timer > 0)
             {
                 timer -= Time.deltaTime;
                 Lightner.fillAmount = timer / 3;
@@ -128,35 +116,26 @@ public class Fire : MonoBehaviour
               
               
             }
-            d.ArmorSetActive(false);
-        
+        d.LightButtonActivated(false);
         d.LighMen(false);
-        d.LightButton(false);
-        d.SkinBlue2(true);
+        d.SkinBlue2();
         Lightner.fillAmount = 0;
+        light1 = null;
+        Boon.Instance.isClicked = false;
 
 
-
-            light1 = null;
-        
-        
     }
     private IEnumerator Armor1()
     {
           
         var d = player.GetComponent<D>();
-       
-
         d.ArMen(true);
+        d.ChangeSkin2();
         d.Aura(true);
         d.AuraSound(true);
-      
-      
-        d.YellowSkin(true);
-        d.LightButton(false);
-         d.LighMen(false);
+        d.YellowSkin();
         ArmorImage.fillAmount = 1;
-            float timer = 3;
+            float timer = 5;
             while (timer > 0)
             {
                
@@ -168,10 +147,9 @@ public class Fire : MonoBehaviour
             ArmorImage.fillAmount = 0;
         
         d.Aura(false);
-        d.YellowSkin2(true);
+        d.YellowSkin2();
         d.StopArmor();
-            d.ArMen(false);
-      
+        d.ArMen(false);
         Armor = null;
 
         

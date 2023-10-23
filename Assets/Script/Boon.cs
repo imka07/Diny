@@ -6,13 +6,22 @@ using UnityEngine.UI;
 public class Boon : MonoBehaviour
 {
     [SerializeField] private GameObject LightEx;
-  
+    public static Boon Instance { get; private set; }
+    public bool isClicked;
+    private void Start()
+    {
+        Instance = this;
+        gameObject.SetActive(false);
+    }
+    private void Update()
+    {
+     
+    }
     public void Boom()
     {
+        isClicked = true; 
         gameObject.SetActive(false);
-      
         var birds = FindObjectsOfType<Bird>();
-
         if (birds.Length > 0)
         {
             for (int i = 0; i < birds.Length; i++)
